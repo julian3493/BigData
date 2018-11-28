@@ -38,13 +38,14 @@ def main(args):
             varTitle = t.string
         for b in r.find_all('body'):
             varBody = b.string
-        noticias = varTitle.lower() + varBody.lower()
+        noticias = varTitle.lower() +" "+ varBody.lower()
     
     # Utilizar tokenize para splitear  noticia y agregarla a la lista resultante
         palabras = word_tokenize(noticias)
         linea = list()
         for r in palabras :
-            if re.match("[0-9,->]",r) :
+            
+            if re.match("[0-9,->]",r) or re.match("\x03",r):
                 continue
             if not r in stop_words:
                  linea.append(r)
