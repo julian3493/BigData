@@ -6,27 +6,32 @@ Created on Tue Nov 27 21:35:05 2018
 """
 import sys
 import json
-
+from time import time
 
 def main(args):
-    diccionario = {}
-    diccionarioTxt = open(r'Doc\noticias.txt', "r")
-    diccionario = json.JSONDecoder().decode(diccionarioTxt.read())
-    
+    noticias = {}
+    # Lectura del documento noticias.txt
+    noticiasTxt = open(r'Doc\noticias.txt', "r")
+    noticias = json.JSONDecoder().decode(noticiasTxt.read())
+    # Inicializacion de variables     
+    tiempoInicial = time()
     indiceInvertido = {}
-    for llave, valor in diccionario.items():
-        for palabra in valor: 
-            if indiceInvertido.get(palabra,False):
-                if llave not in indiceInvertido[palabra]:
-                    indiceInvertido[palabra].append(llave)
-            else: 
-                indiceInvertido[palabra] = [llave]
     
-#    print(indiceInvertido)  Prueba 
+    for id, noticia in noticias.items():
+        for palabra in noticia: 
+            if indiceInvertido.get(palabra,False):
+                if id not in indiceInvertido[palabra]:
+                    indiceInvertido[palabra].append(id)
+            else: 
+                indiceInvertido[palabra] = [id]
+    
+    
                 
     file = open(r'Doc\Indice_invertido.txt', "w")
     file.write(json.JSONEncoder().encode(indiceInvertido))
     file.close()
+    tiempoFinal = (time() - tiempoInicial)
+    print("Hecho en...", tiempoFinal)
         
 if __name__ == '__main__': 
     main(sys.argv)
