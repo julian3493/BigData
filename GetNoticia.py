@@ -9,8 +9,10 @@ Created on Mon Nov 26 21:22:15 2018
 """
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
+from nltk.stem import PorterStemmer
 import re
 from bs4 import BeautifulSoup
+from time import time
 import json
 import sys
 
@@ -20,11 +22,15 @@ import sys
 noticias = varTitle = varBody = ""                  # VARIABLES PARA ALMACENAR RESULTADOS 
 listNoticias = {} 
 listPalabras = list()
+diccionario = {}
 stop_words = set(stopwords.words('english')) 
+ps = PorterStemmer()
 #------------------------------------------------------------------------------
 def main(args):
     # Contador de item's 
     contadorReuter = 0 
+    contadorPalabras = 0
+    tiempoInicial = time()
     # Abrir documento y realizar el parseo a un HTML
     f = open(r'Doc\reut2-000.sgm', 'r')
     data= f.read()
@@ -49,8 +55,9 @@ def main(args):
                 continue
             if not r in stop_words:
                  linea.append(r)
-                 if r not in listPalabras:
-                     listPalabras.append(r)
+                 if ps.stem(r) not in listPalabras:
+                     listPalabras.append(ps.stem(r))
+                     contadorPalabras+= 1
         listNoticias[contadorReuter] = linea
             
     # arreglo de las palabras por noticias
@@ -62,6 +69,9 @@ def main(args):
     palabrasD2 = open(r'Doc\palabras.txt', 'w')
     palabrasD2.write(json.JSONEncoder().encode(listPalabras))
     palabrasD2.close
+    print(contadorPalabras)
+    tiempoFinal = (time() - tiempoInicial)
+    print("Hecho en...", tiempoFinal)
 
 
 # metodo main
