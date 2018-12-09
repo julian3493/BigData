@@ -18,14 +18,15 @@ indiceInvertido = json.JSONDecoder().decode(invTxt.read())
 invTxt.close()
 
 print("Escribe la consulta -> ")
-query = input()
+query = "Dow Chemical Co said a judge on the New Jersey Superior Court for Monmouth County granted its Merrell Dow Pharmaceuticals Inc unit a motion for a directed verdict in its favor in a case alleging its morning sickness drug, Bendectin, caused a child's birth defects"
 t0 = time()
 
-listQuery = []
+PalabrasConsulta = []
 for palabra in word_tokenize(query.lower()):  
     if palabra not in stopwords:
-        listQuery.append(palabra)
-consulta = Counter(listQuery)
+        PalabrasConsulta.append(palabra)
+consulta = Counter(PalabrasConsulta)
+
 
 vectorSpace = []
 for palabra in Diccionario:
@@ -34,7 +35,6 @@ for palabra in Diccionario:
         if palabraNoticia == palabra:
             coincidences = coincidences + 1
     vectorSpace.append(coincidences)
-
 
 
 ifvText = open(r'Doc\idf.txt', "r")
@@ -68,14 +68,23 @@ for palabra in consulta:
                 similitud[key] = m/math.sqrt(x*y)
                 
 
+noticiaTxt = open(r'Doc\noticiasPuritas.txt', "r")
+n = json.JSONDecoder().decode(noticiaTxt.read())
+noticiaTxt.close()
+
 
 print("Para el texto: " + query + "..... Los documentos mas semejantes son: ")
 print()
 
 
+
 contador = 0
 for key in sorted(similitud, key=similitud.get, reverse=True):
+    print()
     print("Documento: #%s, Similitud: %f" % (key,similitud[key]))
+    print()
+    
+    print('body>>>>>>>>>>> %s: ' % n[key])
     contador += 1
 
     if contador>5:

@@ -21,6 +21,7 @@ import sys
   # Variables contador
 noticias = varTitle = varBody = ""                  # VARIABLES PARA ALMACENAR RESULTADOS 
 listNoticias = {} 
+listaNoticiaPurita = {}
 listPalabras = list()
 diccionario = {}
 stop_words = set(stopwords.words('english')) 
@@ -39,13 +40,13 @@ def main(args):
     
     # Extraer infromacion del titulo y del body 
     for r in soup.find_all('reuters'):
-        contadorReuter+= 1
+        
         for t in r.find_all('title'):
             varTitle = t.string
         for b in r.find_all('body'):
             varBody = b.string
         noticias = varTitle.lower() +" "+ varBody.lower()
-    
+        contadorReuter+= 1
     # Utilizar tokenize para splitear  noticia y agregarla a la lista resultante
         palabras = word_tokenize(noticias)
         linea = list()
@@ -59,11 +60,16 @@ def main(args):
                      listPalabras.append(ps.stem(r))
                      contadorPalabras+= 1
         listNoticias[contadorReuter] = linea
+        listaNoticiaPurita[contadorReuter] = noticias
             
     # arreglo de las palabras por noticias
     palabrasD1 = open(r'Doc\noticias.txt', 'w')
     palabrasD1.write(json.JSONEncoder().encode(listNoticias))
     palabrasD1.close
+    
+    x = open(r'Doc\noticiasPuritas.txt', 'w')
+    x.write(json.JSONEncoder().encode(listaNoticiaPurita))
+    x.close
     
     # arreglo de palaras (sin repetir)
     palabrasD2 = open(r'Doc\palabras.txt', 'w')
