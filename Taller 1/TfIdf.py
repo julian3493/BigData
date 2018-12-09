@@ -23,7 +23,7 @@ def tf(vector_space,idf):
         tfidf[key] = vr   
     return tfidf
 
-def idf (palabras,noticias,indiceInvertido):
+def idf (noticias,indiceInvertido):
     longitud = len(noticias)
     v_idf = []
     for indice in indiceInvertido.values():
@@ -38,10 +38,7 @@ def main(args):
     Json_noticia = []
     noticias  = open(r'Doc\noticias.txt', "r")
     Json_noticia = json.JSONDecoder().decode(noticias.read())
-# Obtenemos el diccionario 
-    Json_palabra = []
-    palabras  = open(r'Doc\palabras.txt', "r")
-    Json_palabra = json.JSONDecoder().decode(palabras.read())
+
 # Obtenemos el diccionario 
     vsx = []
     vs  = open(r'Doc\VectorSpace.txt', "r")
@@ -53,7 +50,7 @@ def main(args):
     Json_indiceInvertido = json.JSONDecoder().decode(indiceInvertido.read())
 # -----------------------
     
-    v_idf = idf(Json_palabra,Json_noticia,Json_indiceInvertido)
+    v_idf = idf(Json_noticia,Json_indiceInvertido)
     
     IdfText = open(r'Doc\idf.txt', "w")
     IdfText.write(json.JSONEncoder().encode(v_idf))

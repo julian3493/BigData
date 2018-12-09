@@ -18,7 +18,7 @@ indiceInvertido = json.JSONDecoder().decode(invTxt.read())
 invTxt.close()
 
 print("Escribe la consulta -> ")
-query = input()
+query = "Que infinito es este instante Que sagrado este momento De mirarnos frente a frente Y escucharnos en silencio"
 t0 = time()
 
 listQuery = []
@@ -67,6 +67,9 @@ for palabra in consulta:
                     m += tfidf[i]*test[key][i]
                 similitud[key] = m/math.sqrt(x*y)
                 
+noticiaTxt = open(r'Doc\noticiasPuritas.txt', "r")
+n = json.JSONDecoder().decode(noticiaTxt.read())
+noticiaTxt.close()
 
 
 print("Para el texto: " + query + "..... Los documentos mas semejantes son: ")
@@ -76,6 +79,8 @@ print()
 contador = 0
 for key in sorted(similitud, key=similitud.get, reverse=True):
     print("Documento: #%s, Similitud: %f" % (key,similitud[key]))
+    print(key)
+    print('body>>>>>>>>>>> %s: ' % n[key])
     contador += 1
 
     if contador>5:
